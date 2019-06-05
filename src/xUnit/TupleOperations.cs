@@ -10,7 +10,7 @@ namespace rayTracer.xUnit
             var tuple1 = new Tuple(3, -2, 5, 1);
             var tuple2 = new Tuple(-2, 3, 1, 0);
 
-            var result = tuple1.Add(tuple2);
+            var result = tuple1 + tuple2;
 
             Assert.Equal(new Tuple(1f, 1f, 6f, 1), result);
         }

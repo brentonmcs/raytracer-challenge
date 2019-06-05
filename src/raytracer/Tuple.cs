@@ -22,7 +22,7 @@
 
         public static Tuple operator +(Tuple t1, Tuple t2)
         {
-            return new Tuple(t1.X + t2.X, t1.Y + t2.Y, t1.Z + t2.Z, (short) (t1.W + t2.W));
+            return new Tuple(t1.X + t2.X, t1.Y + t2.Y, t1.Z + t2.Z, t1.W + t2.W);
         }
 
         public static Tuple Vector(float x, float y, float z)
@@ -34,7 +34,6 @@
         {
             return new Tuple(x, y, z, 1);
         }
-
 
         public Tuple Normalise()
         {
@@ -68,7 +67,7 @@
 
         private bool Equals(Tuple other)
         {
-            return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z) && W.Equals(other.W);
+            return X.AlmostEqual(other.X) && Y.AlmostEqual(other.Y) && Z.AlmostEqual(other.Z) && W.AlmostEqual(other.W);
         }
 
         public override int GetHashCode()
@@ -81,11 +80,6 @@
                 hashCode = (hashCode * 397) ^ W.GetHashCode();
                 return hashCode;
             }
-        }
-
-        public Tuple Add(Tuple addTo)
-        {
-            return new Tuple(X + addTo.X, Y + addTo.Y, Z + addTo.Z, W + addTo.W);
         }
 
         public override string ToString()
