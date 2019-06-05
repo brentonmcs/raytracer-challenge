@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\raytracer\raytracer.csproj" />
+    <ProjectReference Include="..\..\src\raytracer\raytracer.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
