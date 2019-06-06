@@ -7,7 +7,7 @@ namespace exercise2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var start = Tuple.Point(0, 1, 0);
             var velocity = Tuple.Vector(1f, 1.8f, 0f).Normalise() * 11.25f;
@@ -21,7 +21,6 @@ namespace exercise2
             var c = new Canvas(900, height);
             var c1 = new Color(0, 1, 0);
 
-            var i = 0;
             while (p.Position.Y <= 500 && p.Position.Y >= 0)
             {
                 Console.WriteLine(p.Position);
@@ -29,7 +28,6 @@ namespace exercise2
                     height - Convert.ToInt32(MathF.Ceiling(p.Position.Y)),
                     c1);
                 p = Tick(e, p);
-                i++;
             }
             
             File.WriteAllText("exercise.ppm", c.CreatePPMLines());
