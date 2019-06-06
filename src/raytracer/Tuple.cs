@@ -1,4 +1,6 @@
-﻿namespace rayTracer
+﻿using rayTracer.Helpers;
+
+namespace rayTracer
 {
     public class Tuple
     {

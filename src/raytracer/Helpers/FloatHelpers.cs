@@ -1,6 +1,6 @@
 using System;
 
-namespace rayTracer
+namespace rayTracer.Helpers
 {
     public static class FloatHelpers
     {

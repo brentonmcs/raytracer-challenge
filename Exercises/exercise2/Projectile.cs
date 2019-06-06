@@ -1,6 +1,6 @@
 using rayTracer;
 
-namespace rayRacer.runner
+namespace exercise2
 {
     public class Projectile
     {
