@@ -1,6 +1,6 @@
 using rayTracer;
 
-namespace rayRacer.runner
+namespace exercise1
 {
     public class Environment
     {

@@ -24,8 +24,8 @@ namespace exercise2
             while (p.Position.Y <= 500 && p.Position.Y >= 0)
             {
                 Console.WriteLine(p.Position);
-                c.WriteColor(Convert.ToInt32(MathF.Ceiling(p.Position.X)),
-                    height - Convert.ToInt32(MathF.Ceiling(p.Position.Y)),
+                c.WriteColor(Convert.ToInt32(Math.Ceiling(p.Position.X)),
+                    height - Convert.ToInt32(Math.Ceiling(p.Position.Y)),
                     c1);
                 p = Tick(e, p);
             }

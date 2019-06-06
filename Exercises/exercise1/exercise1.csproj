@@ -7,8 +7,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyName>rayRacer.runner</AssemblyName>
-    <RootNamespace>rayRacer.runner</RootNamespace>
   </PropertyGroup>
 
 </Project>

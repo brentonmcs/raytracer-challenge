@@ -6,8 +6,8 @@ namespace rayTracer
     {
         public static float Magnitude(this Tuple t)
         {
-            var squares = MathF.Pow(t.X, 2) + MathF.Pow(t.Y, 2) + MathF.Pow(t.Z, 2);
-            return MathF.Sqrt(squares);
+            var squares = Math.Pow(t.X, 2) + Math.Pow(t.Y, 2) + Math.Pow(t.Z, 2);
+            return Convert.ToSingle( Math.Sqrt(squares));
         }
         
         public static float Dot(Tuple tuple, Tuple tuple2) =>
