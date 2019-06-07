@@ -115,15 +115,43 @@ namespace rayTracer.xUnit
         public void TransposeMatrix()
         {
             var mA = new Matrix(4, 4, new[] {0f, 9, 3, 0, 9, 8, 0, 8, 1, 8, 5, 3, 0, 0, 5, 8});
-            var mR = new Matrix(4,4, new []{0f,9,1,0,9,8,8,0,3,0,5,5,0,8,3,8});
-            
+            var mR = new Matrix(4, 4, new[] {0f, 9, 1, 0, 9, 8, 8, 0, 3, 0, 5, 5, 0, 8, 3, 8});
+
             Assert.Equal(mR, mA.Transpose());
         }
-        
+
         [Fact]
         public void TransposeMatrixIdentity()
         {
             Assert.Equal(Matrix.Identity, Matrix.Identity.Transpose());
+        }
+
+        [Fact]
+        public void CalculateDeterminant2X2()
+        {
+            var m1 = new Matrix(2, 2, new[] {1f, 5, -3, 2});
+
+            Assert.Equal(17f, m1.Determinant);
+        }
+
+        [Fact]
+        public void GetSubMatrixOf3X3()
+        {
+            var m = new Matrix(3, 3, new[] {1f, 5, 0, -3, 2, 7, 0, 6, -3});
+
+            var mR = m.SubMatrix(0, 2);
+
+            Assert.Equal(new Matrix(2, 2, new[] {-3f, 2, 0, 6}), mR);
+        }
+
+        [Fact]
+        public void GetSubMatrixOf4X4()
+        {
+            var m = new Matrix(4, 4, new[] {-6f, 1, 1, 6, -8, 5, 8, 6, -1,0,8,2,-7,1,-1,1});
+
+            var mR = m.SubMatrix(2, 1);
+
+            Assert.Equal(new Matrix(3, 3, new[] {-6f, 1, 6, -8,8,6,-7,-1,1}), mR);
         }
     }
 }

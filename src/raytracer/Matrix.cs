@@ -63,6 +63,35 @@ namespace rayTracer
             return new Tuple(x, y, z, w);
         }
 
+        public float Determinant
+        {
+            get { return _values[0] * _values[3] - _values[1] * _values[2]; }
+        }
+
+        public Matrix SubMatrix(int row, int col)
+        {
+            var newSize = (_rows - 1) * (_columns - 1);
+            var newValues = new float[newSize];
+            var newIndex = 0;
+            for (var i = 0; i < _values.Length; i++)
+            {
+                if (GetRow(i) == row || GetCol(i) == col) continue;
+
+                newValues[newIndex] = _values[i];
+                newIndex++;
+            }
+
+            return new Matrix(_rows - 1, _columns - 1, newValues);
+        }
+
+
+        private int GetCol(int i)
+        {
+            return i - GetRow(i) * _columns;
+        }
+
+        private int GetRow(int index) => index / _rows;
+
         private static float MultiplyRowCol(Matrix mA, Matrix mB, int r, int c)
         {
             return mA[r, 0] * mB[0, c] +
