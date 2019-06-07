@@ -153,5 +153,16 @@ namespace rayTracer.xUnit
 
             Assert.Equal(new Matrix(3, 3, new[] {-6f, 1, 6, -8,8,6,-7,-1,1}), mR);
         }
+
+        [Fact]
+        public void CalculateMinor()
+        {
+            var m = new Matrix(3,3, new []{ 3f,5,0,2,-1,-7,6,-1,5});
+
+            var b = m.SubMatrix(1, 0);
+            
+            Assert.Equal(25, b.Determinant);
+
+        }
     }
 }
