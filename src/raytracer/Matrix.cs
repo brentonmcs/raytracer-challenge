@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using rayTracer.Helpers;
 
 namespace rayTracer
@@ -17,6 +18,7 @@ namespace rayTracer
             _rows = rows;
             _columns = columns;
             _values = values;
+
 
             var requiredValues = _columns * rows;
             if (_values.Length != requiredValues)
@@ -65,8 +67,26 @@ namespace rayTracer
 
         public float Determinant
         {
-            get { return _values[0] * _values[3] - _values[1] * _values[2]; }
+            get
+            {
+                if (_columns == 2)
+                {
+                    return _values[0] * _values[3] - _values[1] * _values[2];
+                }
+
+                var result = 0f;
+                for (var i = 0; i < _columns; i++)
+                {
+                    result += _values[i] * Cofactor(0, i);
+                }
+
+                return result;
+            }
         }
+
+        public bool Invertible => !Determinant.AlmostEqual(0);
+
+        public float Minor(int row, int col) => SubMatrix(row, col).Determinant;
 
         public Matrix SubMatrix(int row, int col)
         {
@@ -84,11 +104,14 @@ namespace rayTracer
             return new Matrix(_rows - 1, _columns - 1, newValues);
         }
 
-
-        private int GetCol(int i)
+        public float Cofactor(int row, int col)
         {
-            return i - GetRow(i) * _columns;
+            var minor = Minor(row, col);
+
+            return (row + col) % 2 == 0 ? minor : minor * -1;
         }
+
+        private int GetCol(int i) => i - GetRow(i) * _columns;
 
         private int GetRow(int index) => index / _rows;
 
@@ -151,7 +174,46 @@ namespace rayTracer
 
         public override string ToString()
         {
-            return _values.Aggregate(string.Empty, (current, v) => current + (v + " "));
+            var resultStr = new StringBuilder();
+
+            for (var r = 0; r < _rows; r++)
+            {
+                for (var c = 0; c < _columns; c++)
+                {
+                    resultStr.Append(" | " + this[r, c]);
+
+                    if (c == _columns - 1)
+                    {
+                        resultStr.Append(" |");
+                    }
+                }
+
+                resultStr.AppendLine();
+            }
+
+            return resultStr.ToString();
+        }
+
+        public Matrix Inverse()
+        {
+            if (!Invertible)
+                throw new NotSupportedException("Matrix is not invertible");
+
+            var result = new float[_rows * _columns];
+
+            var mD = Determinant;
+            for (var r = 0; r < _rows ; r++)
+            {
+                for (var c = 0; c < _columns ; c++)
+                {
+                    var cf = Cofactor(r, c);
+
+                    var index = GetIndex(c, r);
+                    result[index] = cf / mD;
+                }
+            }
+            
+            return new Matrix(_rows, _columns, result);
         }
     }
 }
