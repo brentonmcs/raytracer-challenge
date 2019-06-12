@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text;
 using rayTracer.Helpers;
 
@@ -7,44 +6,45 @@ namespace rayTracer
 {
     public class Matrix
     {
-        private readonly int _rows;
-        private readonly int _columns;
-        private readonly float[] _values;
+        public readonly int Rows;
+        public readonly int Columns;
+        public float[] Values;
 
-        public static Matrix Identity = new Matrix(4, 4, new[] {1f, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
+        public static Matrix Identity => new Matrix(4, 4, new[] {1f, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
 
         public Matrix(int rows, int columns, float[] values)
         {
-            _rows = rows;
-            _columns = columns;
-            _values = values;
+            Rows = rows;
+            Columns = columns;
+            Values = values;
 
 
-            var requiredValues = _columns * rows;
-            if (_values.Length != requiredValues)
+            var requiredValues = Columns * rows;
+            if (Values.Length != requiredValues)
                 throw new NotSupportedException("There needs to be " + requiredValues + " values in the array");
         }
 
+
         private Matrix(int rows, int columns)
         {
-            _rows = rows;
-            _columns = columns;
+            Rows = rows;
+            Columns = columns;
 
             var requiredValues = rows * columns;
-            _values = new float[requiredValues];
+            Values = new float[requiredValues];
 
             for (var i = 0; i < requiredValues; i++)
             {
-                _values[i] = 0f;
+                Values[i] = 0f;
             }
         }
 
         public static Matrix operator *(Matrix mA, Matrix mB)
         {
-            var mR = new Matrix(mA._rows, mA._rows);
-            for (var r = 0; r < mA._rows; r++)
+            var mR = new Matrix(mA.Rows, mA.Rows);
+            for (var r = 0; r < mA.Rows; r++)
             {
-                for (var c = 0; c < mA._columns; c++)
+                for (var c = 0; c < mA.Columns; c++)
                 {
                     mR[r, c] = MultiplyRowCol(mA, mB, r, c);
                 }
@@ -69,15 +69,15 @@ namespace rayTracer
         {
             get
             {
-                if (_columns == 2)
+                if (Columns == 2)
                 {
-                    return _values[0] * _values[3] - _values[1] * _values[2];
+                    return Values[0] * Values[3] - Values[1] * Values[2];
                 }
 
                 var result = 0f;
-                for (var i = 0; i < _columns; i++)
+                for (var i = 0; i < Columns; i++)
                 {
-                    result += _values[i] * Cofactor(0, i);
+                    result += Values[i] * Cofactor(0, i);
                 }
 
                 return result;
@@ -90,18 +90,18 @@ namespace rayTracer
 
         public Matrix SubMatrix(int row, int col)
         {
-            var newSize = (_rows - 1) * (_columns - 1);
+            var newSize = (Rows - 1) * (Columns - 1);
             var newValues = new float[newSize];
             var newIndex = 0;
-            for (var i = 0; i < _values.Length; i++)
+            for (var i = 0; i < Values.Length; i++)
             {
                 if (GetRow(i) == row || GetCol(i) == col) continue;
 
-                newValues[newIndex] = _values[i];
+                newValues[newIndex] = Values[i];
                 newIndex++;
             }
 
-            return new Matrix(_rows - 1, _columns - 1, newValues);
+            return new Matrix(Rows - 1, Columns - 1, newValues);
         }
 
         public float Cofactor(int row, int col)
@@ -111,9 +111,9 @@ namespace rayTracer
             return (row + col) % 2 == 0 ? minor : minor * -1;
         }
 
-        private int GetCol(int i) => i - GetRow(i) * _columns;
+        private int GetCol(int i) => i - GetRow(i) * Columns;
 
-        private int GetRow(int index) => index / _rows;
+        private int GetRow(int index) => index / Rows;
 
         private static float MultiplyRowCol(Matrix mA, Matrix mB, int r, int c)
         {
@@ -125,26 +125,13 @@ namespace rayTracer
 
         public float this[int row, int col]
         {
-            get => _values[GetIndex(row, col)];
-            private set => _values[GetIndex(row, col)] = value;
+            get => Values[GetIndex(row, col)];
+            set => Values[GetIndex(row, col)] = value;
         }
 
-        public Matrix Transpose()
-        {
-            var result = new float[_rows * _columns];
-            var resultIndex = 0;
+       
 
-            for (var c = 0; c < _columns; c++)
-            for (var r = 0; r < _rows; r++)
-            {
-                result[resultIndex] = _values[r * _rows + c];
-                resultIndex++;
-            }
-
-            return new Matrix(_rows, _columns, result);
-        }
-
-        private int GetIndex(int row, int col) => row * _columns + col;
+        internal int GetIndex(int row, int col) => row * Columns + col;
 
         public override bool Equals(object obj)
         {
@@ -155,12 +142,12 @@ namespace rayTracer
 
         private bool Equals(Matrix other)
         {
-            if (_values.Length != other._values.Length)
+            if (Values.Length != other.Values.Length)
                 return false;
 
-            for (var i = 0; i < _values.Length; i++)
+            for (var i = 0; i < Values.Length; i++)
             {
-                if (!_values[i].AlmostEqual(other._values[i]))
+                if (!Values[i].AlmostEqual(other.Values[i]))
                     return false;
             }
 
@@ -169,20 +156,22 @@ namespace rayTracer
 
         public override int GetHashCode()
         {
-            return _values != null ? _values.GetHashCode() : 0;
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
+            return Values?.GetHashCode() ?? 0;
         }
+
 
         public override string ToString()
         {
             var resultStr = new StringBuilder();
 
-            for (var r = 0; r < _rows; r++)
+            for (var r = 0; r < Rows; r++)
             {
-                for (var c = 0; c < _columns; c++)
+                for (var c = 0; c < Columns; c++)
                 {
                     resultStr.Append(" | " + this[r, c]);
 
-                    if (c == _columns - 1)
+                    if (c == Columns - 1)
                     {
                         resultStr.Append(" |");
                     }
@@ -192,28 +181,6 @@ namespace rayTracer
             }
 
             return resultStr.ToString();
-        }
-
-        public Matrix Inverse()
-        {
-            if (!Invertible)
-                throw new NotSupportedException("Matrix is not invertible");
-
-            var result = new float[_rows * _columns];
-
-            var mD = Determinant;
-            for (var r = 0; r < _rows ; r++)
-            {
-                for (var c = 0; c < _columns ; c++)
-                {
-                    var cf = Cofactor(r, c);
-
-                    var index = GetIndex(c, r);
-                    result[index] = cf / mD;
-                }
-            }
-            
-            return new Matrix(_rows, _columns, result);
         }
     }
 }
