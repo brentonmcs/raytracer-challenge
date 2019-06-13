@@ -4,7 +4,7 @@ using rayTracer;
 using Color = rayTracer.Color;
 using Tuple = rayTracer.Tuple;
 
-namespace exervice4
+namespace exercise4
 {
     class Program
     {

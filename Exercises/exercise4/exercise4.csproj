@@ -3,6 +3,8 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.0</TargetFramework>
+        <AssemblyName>exercise4</AssemblyName>
+        <RootNamespace>exercise4</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
