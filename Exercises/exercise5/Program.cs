@@ -20,8 +20,13 @@ namespace exercise5
             var canvas = new Canvas(canvasPixels, canvasPixels);
 
             var color = new Color(1, 0, 0);
-            var shape = new Sphere {Transform = Matrix.Scaling(1, 0.5f, 1)};
+            //var shape = new Sphere {Transform = Matrix.Scaling(1, 0.5f, 1)};
 
+            //var shape = new Sphere {Transform = Matrix.Scaling(0.5f, 1, 1)};
+            //var shape = new Sphere {Transform = Matrix.Scaling(0.5f, 1, 1)};
+            //var shape = new Sphere {Transform = Matrix.Identity.Rotate_Z(MathF.PI / 4).Scaling(0.5f, 1, 1)};
+
+            var shape = new Sphere {Transform = Matrix.Shearing(1f, 0, 0,0,0,0).Scaling(0.5f,1,1)};
             for (var y = 0; y < canvasPixels; y++)
             {
                 var worldY = half - pixelSize * y;
@@ -29,7 +34,7 @@ namespace exercise5
                 for (var x = 0; x < canvasPixels; x++)
                 {
                     var worldX = -half + pixelSize * x;
-                    
+
                     var position = Tuple.Point(worldX, worldY, wallZ);
                     var r = new Ray(rayOrigin, (position - rayOrigin).Normalise());
 

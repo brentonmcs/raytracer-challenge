@@ -177,6 +177,7 @@ namespace rayTracer
         }
 
         public static Matrix Scaling(float x, float y, float z) => Identity.Scaling(x, y, z);
-        public static Matrix Translation(float x, float y, float z) => Identity.Translation(x, y, z);    
+        public static Matrix Translation(float x, float y, float z) => Identity.Translation(x, y, z);
+        public static Matrix Shearing(float xy, float xz, float yx, float yz, float zx, float zy) => Identity.Shearing(xz,xz,yx,yz,zx,zy);
     }
 }
