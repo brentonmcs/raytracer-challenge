@@ -2,6 +2,7 @@ using System;
 
 namespace rayTracer
 {
+    
     public static class MatrixFluentApi
     {
         public static Matrix Rotate_X(this Matrix inMatrix, float r)
@@ -11,9 +12,9 @@ namespace rayTracer
             m[1, 2] = Convert.ToSingle(-Math.Sin(r));
             m[2, 1] = Convert.ToSingle(Math.Sin(r));
             m[2, 2] = Convert.ToSingle(Math.Cos(r));
-            return  m * inMatrix;
+            return m * inMatrix;
         }
-        
+
         public static Matrix Rotate_Y(this Matrix inMatrix, float r)
         {
             var m = Matrix.Identity;
@@ -21,9 +22,9 @@ namespace rayTracer
             m[0, 2] = Convert.ToSingle(Math.Sin(r));
             m[2, 0] = Convert.ToSingle(-Math.Sin(r));
             m[2, 2] = Convert.ToSingle(Math.Cos(r));
-            return  m * inMatrix;
+            return m * inMatrix;
         }
-        
+
         public static Matrix Rotate_Z(this Matrix inMatrix, float r)
         {
             var m = Matrix.Identity;
@@ -31,10 +32,10 @@ namespace rayTracer
             m[0, 1] = Convert.ToSingle(-Math.Sin(r));
             m[1, 0] = Convert.ToSingle(Math.Sin(r));
             m[1, 1] = Convert.ToSingle(Math.Cos(r));
-            return  m * inMatrix;
+            return m * inMatrix;
         }
-        
-        public static Matrix Shearing(this Matrix inMatrix,  float xy, float xz, float yx, float yz, float zx, float zy)
+
+        public static Matrix Shearing(this Matrix inMatrix, float xy, float xz, float yx, float yz, float zx, float zy)
         {
             var m = Matrix.Identity;
             m[0, 1] = xy;
@@ -43,7 +44,7 @@ namespace rayTracer
             m[1, 2] = yz;
             m[2, 0] = zx;
             m[2, 1] = zy;
-            return  m * inMatrix;
+            return m * inMatrix;
         }
 
         public static Matrix Scaling(this Matrix inMatrix, float x, float y, float z)
@@ -61,9 +62,9 @@ namespace rayTracer
             m[0, 3] = x;
             m[1, 3] = y;
             m[2, 3] = z;
-            return  m * inMatrix;
+            return m * inMatrix;
         }
-        
+
         public static Matrix Transpose(this Matrix m)
         {
             var result = new float[m.Rows * m.Columns];
@@ -79,7 +80,7 @@ namespace rayTracer
             return new Matrix(m.Rows, m.Columns, result);
         }
 
-        
+
         public static Matrix Inverse(this Matrix m)
         {
             if (!m.Invertible)
@@ -89,14 +90,12 @@ namespace rayTracer
 
             var mD = m.Determinant;
             for (var r = 0; r < m.Rows; r++)
+            for (var c = 0; c < m.Columns; c++)
             {
-                for (var c = 0; c < m.Columns; c++)
-                {
-                    var cf = m.Cofactor(r, c);
+                var cf = m.Cofactor(r, c);
 
-                    var index = m.GetIndex(c, r);
-                    result[index] = cf / mD;
-                }
+                var index = m.GetIndex(c, r);
+                result[index] = cf / mD;
             }
 
             return new Matrix(m.Rows, m.Columns, result);

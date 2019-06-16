@@ -1,10 +1,40 @@
 using System;
 using Xunit;
 
-namespace rayTracer.xUnit
+namespace rayTracer.xUnit.MatrixTests
 {
     public class MatrixMovementTests
     {
+        [Fact]
+        public void ChainingTransformations()
+        {
+            var p = Tuple.Point(1, 0, 1);
+            var a = Matrix.Identity.Rotate_X(MathF.PI / 2);
+            var b = Matrix.Identity.Scaling(5, 5, 5);
+            var c = Matrix.Identity.Translation(10, 5, 7);
+
+            var p2 = a * p;
+            Assert.Equal(Tuple.Point(1, -1, 0), p2);
+
+            var p3 = b * p2;
+            Assert.Equal(Tuple.Point(5, -5, 0), p3);
+
+            var p4 = c * p3;
+            Assert.Equal(Tuple.Point(15, 0, 7), p4);
+        }
+
+        [Fact]
+        public void ChainingTransformations2()
+        {
+            var t =
+                Matrix.Identity
+                    .Rotate_X(MathF.PI / 2)
+                    .Scaling(5, 5, 5)
+                    .Translation(10, 5, 7);
+
+            Assert.Equal(Tuple.Point(15, 0, 7), t * Tuple.Point(1, 0, 1));
+        }
+
         [Fact]
         public void MultiplyingByATranslationMatrix()
         {
@@ -33,34 +63,6 @@ namespace rayTracer.xUnit
             var v = Tuple.Vector(-3, 4, 5);
 
             Assert.Equal(v, transform * v);
-        }
-
-        [Fact]
-        public void ScalingMatrixAppliedToPoint()
-        {
-            var transform = Matrix.Identity.Scaling(2f, 3f, 4f);
-            var p = Tuple.Point(-4, 6, 8);
-
-            Assert.Equal(Tuple.Point(-8, 18, 32), transform * p);
-        }
-
-        [Fact]
-        public void ScalingMatrixAppliedToVector()
-        {
-            var transform = Matrix.Identity.Scaling(2f, 3f, 4f);
-            var p = Tuple.Vector(-4, 6, 8);
-
-            Assert.Equal(Tuple.Vector(-8, 18, 32), transform * p);
-        }
-
-        [Fact]
-        public void ScalingInverseMatrixAppliedToVector()
-        {
-            var transform = Matrix.Identity.Scaling(2f, 3f, 4f);
-            var inv = transform.Inverse();
-            var p = Tuple.Vector(-4, 6, 8);
-
-            Assert.Equal(Tuple.Vector(-2, 2, 2), inv * p);
         }
 
         [Fact]
@@ -106,7 +108,7 @@ namespace rayTracer.xUnit
             Assert.Equal(Tuple.Point(MathF.Sqrt(2) / 2f, 0, MathF.Sqrt(2) / 2f), halfQuarter * p);
             Assert.Equal(Tuple.Point(1, 0, 0), fullQuarter * p);
         }
-        
+
         [Fact]
         public void RotationAroundYTo3()
         {
@@ -128,6 +130,34 @@ namespace rayTracer.xUnit
 
             Assert.Equal(Tuple.Point(-MathF.Sqrt(2) / 2f, MathF.Sqrt(2) / 2f, 0), halfQuarter * p);
             Assert.Equal(Tuple.Point(-1, 0, 0), fullQuarter * p);
+        }
+
+        [Fact]
+        public void ScalingInverseMatrixAppliedToVector()
+        {
+            var transform = Matrix.Identity.Scaling(2f, 3f, 4f);
+            var inv = transform.Inverse();
+            var p = Tuple.Vector(-4, 6, 8);
+
+            Assert.Equal(Tuple.Vector(-2, 2, 2), inv * p);
+        }
+
+        [Fact]
+        public void ScalingMatrixAppliedToPoint()
+        {
+            var transform = Matrix.Identity.Scaling(2f, 3f, 4f);
+            var p = Tuple.Point(-4, 6, 8);
+
+            Assert.Equal(Tuple.Point(-8, 18, 32), transform * p);
+        }
+
+        [Fact]
+        public void ScalingMatrixAppliedToVector()
+        {
+            var transform = Matrix.Identity.Scaling(2f, 3f, 4f);
+            var p = Tuple.Vector(-4, 6, 8);
+
+            Assert.Equal(Tuple.Vector(-8, 18, 32), transform * p);
         }
 
         [Fact]
@@ -182,36 +212,6 @@ namespace rayTracer.xUnit
             var p = Tuple.Point(2, 3, 4);
 
             Assert.Equal(Tuple.Point(2, 3, 7), transform * p);
-        }
-
-        [Fact]
-        public void ChainingTransformations()
-        {
-            var p = Tuple.Point(1, 0, 1);
-            var a = Matrix.Identity.Rotate_X(MathF.PI / 2);
-            var b = Matrix.Identity.Scaling(5, 5, 5);
-            var c = Matrix.Identity.Translation(10, 5, 7);
-
-            var p2 = a * p;
-            Assert.Equal(Tuple.Point(1, -1, 0), p2);
-
-            var p3 = b * p2;
-            Assert.Equal(Tuple.Point(5, -5, 0), p3);
-
-            var p4 = c * p3;
-            Assert.Equal(Tuple.Point(15, 0, 7), p4);
-        }
-
-        [Fact]
-        public void ChainingTransformations2()
-        {
-            var t =
-                Matrix.Identity
-                    .Rotate_X(MathF.PI / 2)
-                    .Scaling(5, 5, 5)
-                    .Translation(10, 5, 7);
-
-            Assert.Equal(Tuple.Point(15, 0, 7), t * Tuple.Point(1, 0, 1));
         }
     }
 }

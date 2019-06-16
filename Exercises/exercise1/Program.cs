@@ -25,7 +25,7 @@ namespace exercise1
 
         private static Projectile Tick(Environment e, Projectile projectile)
         {
-            return new Projectile(projectile.Position + projectile.Velocity, projectile.Velocity+ e.Gravity + e.Wind);
+            return new Projectile(projectile.Position + projectile.Velocity, projectile.Velocity + e.Gravity + e.Wind);
         }
     }
 }

@@ -5,14 +5,6 @@ namespace rayTracer
     public class Tuple
     {
         private static readonly Tuple Zero = new Tuple(0, 0, 0, 0);
-        public float X { get; }
-        public float Y { get; }
-        public float Z { get; }
-        public float W { get; }
-
-        public bool IsVector => W.Equals(0);
-
-        public bool IsPoint => W.Equals(1);
 
         public Tuple(float x, float y, float z, float w)
         {
@@ -21,6 +13,15 @@ namespace rayTracer
             Z = z;
             W = w;
         }
+
+        public float X { get; }
+        public float Y { get; }
+        public float Z { get; }
+        public float W { get; }
+
+        public bool IsVector => W.Equals(0);
+
+        public bool IsPoint => W.Equals(1);
 
         public static Tuple operator +(Tuple t1, Tuple t2)
         {

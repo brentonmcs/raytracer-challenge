@@ -5,15 +5,15 @@ using Tuple = rayTracer.Tuple;
 
 namespace exercise2
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             var start = Tuple.Point(0, 1, 0);
             var velocity = Tuple.Vector(1f, 1.8f, 0f).Normalise() * 11.25f;
 
             var p = new Projectile(start, velocity);
-            var gravity = Tuple.Vector(0, -0.1f, 0); 
+            var gravity = Tuple.Vector(0, -0.1f, 0);
             var wind = Tuple.Vector(-0.01f, 0, 0);
             var e = new Environment(gravity, wind);
             const int height = 500;
@@ -29,7 +29,7 @@ namespace exercise2
                     c1);
                 p = Tick(e, p);
             }
-            
+
             File.WriteAllText("exercise.ppm", c.CreatePPMLines());
         }
 

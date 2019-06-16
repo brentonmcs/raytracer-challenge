@@ -6,11 +6,9 @@ namespace rayTracer
 {
     public class Matrix
     {
-        public readonly int Rows;
         public readonly int Columns;
+        public readonly int Rows;
         public float[] Values;
-
-        public static Matrix Identity => new Matrix(4, 4, new[] {1f, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
 
         public Matrix(int rows, int columns, float[] values)
         {
@@ -33,22 +31,38 @@ namespace rayTracer
             var requiredValues = rows * columns;
             Values = new float[requiredValues];
 
-            for (var i = 0; i < requiredValues; i++)
+            for (var i = 0; i < requiredValues; i++) Values[i] = 0f;
+        }
+
+        public static Matrix Identity => new Matrix(4, 4, new[] {1f, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1});
+
+        public float Determinant
+        {
+            get
             {
-                Values[i] = 0f;
+                if (Columns == 2) return Values[0] * Values[3] - Values[1] * Values[2];
+
+                var result = 0f;
+                for (var i = 0; i < Columns; i++) result += Values[i] * Cofactor(0, i);
+
+                return result;
             }
+        }
+
+        public bool Invertible => !Determinant.AlmostEqual(0);
+
+        public float this[int row, int col]
+        {
+            get => Values[GetIndex(row, col)];
+            set => Values[GetIndex(row, col)] = value;
         }
 
         public static Matrix operator *(Matrix mA, Matrix mB)
         {
             var mR = new Matrix(mA.Rows, mA.Rows);
             for (var r = 0; r < mA.Rows; r++)
-            {
-                for (var c = 0; c < mA.Columns; c++)
-                {
-                    mR[r, c] = MultiplyRowCol(mA, mB, r, c);
-                }
-            }
+            for (var c = 0; c < mA.Columns; c++)
+                mR[r, c] = MultiplyRowCol(mA, mB, r, c);
 
             return mR;
         }
@@ -65,28 +79,10 @@ namespace rayTracer
             return new Tuple(x, y, z, w);
         }
 
-        public float Determinant
+        public float Minor(int row, int col)
         {
-            get
-            {
-                if (Columns == 2)
-                {
-                    return Values[0] * Values[3] - Values[1] * Values[2];
-                }
-
-                var result = 0f;
-                for (var i = 0; i < Columns; i++)
-                {
-                    result += Values[i] * Cofactor(0, i);
-                }
-
-                return result;
-            }
+            return SubMatrix(row, col).Determinant;
         }
-
-        public bool Invertible => !Determinant.AlmostEqual(0);
-
-        public float Minor(int row, int col) => SubMatrix(row, col).Determinant;
 
         public Matrix SubMatrix(int row, int col)
         {
@@ -111,9 +107,15 @@ namespace rayTracer
             return (row + col) % 2 == 0 ? minor : minor * -1;
         }
 
-        private int GetCol(int i) => i - GetRow(i) * Columns;
+        private int GetCol(int i)
+        {
+            return i - GetRow(i) * Columns;
+        }
 
-        private int GetRow(int index) => index / Rows;
+        private int GetRow(int index)
+        {
+            return index / Rows;
+        }
 
         private static float MultiplyRowCol(Matrix mA, Matrix mB, int r, int c)
         {
@@ -123,15 +125,11 @@ namespace rayTracer
                    mA[r, 3] * mB[3, c];
         }
 
-        public float this[int row, int col]
+
+        internal int GetIndex(int row, int col)
         {
-            get => Values[GetIndex(row, col)];
-            set => Values[GetIndex(row, col)] = value;
+            return row * Columns + col;
         }
-
-       
-
-        internal int GetIndex(int row, int col) => row * Columns + col;
 
         public override bool Equals(object obj)
         {
@@ -146,10 +144,8 @@ namespace rayTracer
                 return false;
 
             for (var i = 0; i < Values.Length; i++)
-            {
                 if (!Values[i].AlmostEqual(other.Values[i]))
                     return false;
-            }
 
             return true;
         }
@@ -171,10 +167,7 @@ namespace rayTracer
                 {
                     resultStr.Append(" | " + this[r, c]);
 
-                    if (c == Columns - 1)
-                    {
-                        resultStr.Append(" |");
-                    }
+                    if (c == Columns - 1) resultStr.Append(" |");
                 }
 
                 resultStr.AppendLine();
@@ -182,5 +175,9 @@ namespace rayTracer
 
             return resultStr.ToString();
         }
+
+        public static Matrix Scaling(float x, float y, float z) => Identity.Scaling(x, y, z);
+        public static Matrix Translation(float x, float y, float z) => Identity.Translation(x, y, z);
+        public static Matrix Shearing(float xy, float xz, float yx, float yz, float zx, float zy) => Identity.Shearing(xz,xz,yx,yz,zx,zy);
     }
 }
