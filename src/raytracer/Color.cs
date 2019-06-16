@@ -12,7 +12,7 @@ namespace rayTracer
         public float Green => Y;
 
         public float Blue => Z;
-        
+
         public string ScaledString => $"{ScaleColor(Red)} {ScaleColor(Green)} {ScaleColor(Blue)}";
 
         private static int ScaleColor(float color)
@@ -21,6 +21,7 @@ namespace rayTracer
             var scaledColor = (int) Math.Floor(clampColor);
             return scaledColor == 256 ? 255 : scaledColor;
         }
+
         private static float ClampColor(float color)
         {
             if (color < 0f)

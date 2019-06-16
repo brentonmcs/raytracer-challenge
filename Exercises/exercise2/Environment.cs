@@ -1,4 +1,3 @@
-
 using rayTracer;
 
 namespace exercise2
