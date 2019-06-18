@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace rayTracer.xUnit.TupleAndVectors
@@ -100,6 +101,28 @@ namespace rayTracer.xUnit.TupleAndVectors
             var tuple2 = new Tuple(3f, 2.1f, -12.2f, 1);
 
             Assert.NotEqual(tuple1, tuple2);
+        }
+
+        [Fact]
+        public void ReflectingAVectorApproachingAt45Deg()
+        {
+            var v = Tuple.Vector(1, -1, 0);
+            var n = Tuple.Vector(0, 1, 0);
+
+            var r = v.Reflect(n);
+            
+            Assert.Equal(Tuple.Vector(1,1,0), r);
+        }
+        
+        [Fact]
+        public void ReflectingAVectorOffASlantedSurface()
+        {
+            var v = Tuple.Vector(0, -1, 0);
+            var n = Tuple.Vector(MathF.Sqrt(2)/2, MathF.Sqrt(2)/2, 0);
+
+            var r = v.Reflect(n);
+            
+            Assert.Equal(Tuple.Vector(1,0,0), r);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.IO;
 using rayTracer;
 using Tuple = rayTracer.Tuple;
 
-namespace exercise5
+namespace exercise6
 {
     class Program
     {
@@ -19,14 +19,13 @@ namespace exercise5
 
             var canvas = new Canvas(canvasPixels, canvasPixels);
 
-            var color = new Color(1, 0, 0);
-            var shape = new Sphere {Transform = Matrix.Scaling(1, 0.5f, 1)};
+            var shape = new Sphere {Material = new Material {Color = new Color(1, 0.2f, 1)}};
 
-            //var shape = new Sphere {Transform = Matrix.Scaling(0.5f, 1, 1)};
-            //var shape = new Sphere {Transform = Matrix.Scaling(0.5f, 1, 1)};
-            //var shape = new Sphere {Transform = Matrix.Identity.Rotate_Z(MathF.PI / 4).Scaling(0.5f, 1, 1)};
 
-            //var shape = new Sphere {Transform = Matrix.Shearing(1f, 0, 0,0,0,0).Scaling(0.5f,1,1)};
+            var lightPosition = Tuple.Point(-10, 10, -10);
+            var lightColor = new Color(1, 1, 1);
+            var light = new Light(lightPosition, lightColor);
+
             for (var y = 0; y < canvasPixels; y++)
             {
                 var worldY = half - pixelSize * y;
@@ -38,17 +37,19 @@ namespace exercise5
                     var position = Tuple.Point(worldX, worldY, wallZ);
                     var r = new Ray(rayOrigin, (position - rayOrigin).Normalise());
 
-                    var xs = shape.Intersections(r);
+                    var hit = shape.Intersections(r).Hit();
+                    if (hit == null) continue;
 
-                    Console.WriteLine($"World X {worldX}, WorldY {worldY}, Intersections Count {xs.Count}");
-                    if (xs.Hit() == null) continue;
+                    var point = r.Position(hit.T);
+                    var normal = hit.Object.NormalAt(point);
+                    var color = hit.Object.Material.Lighting(light, point, r.Direction.Normalise(), normal);
 
                     Console.WriteLine("Hit");
                     canvas.WriteColor(x, y, color);
                 }
             }
 
-            File.WriteAllText("exercise5.ppm", canvas.CreatePPMLines());
+            File.WriteAllText("exercise6.ppm", canvas.CreatePPMLines());
         }
     }
 }
