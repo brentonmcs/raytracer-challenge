@@ -17,7 +17,7 @@ namespace rayTracer
         public float X { get; }
         public float Y { get; }
         public float Z { get; }
-        public float W { get; }
+        public float W { get; set; }
 
         public bool IsVector => W.Equals(0);
 
@@ -80,6 +80,7 @@ namespace rayTracer
                 var hashCode = X.GetHashCode();
                 hashCode = (hashCode * 397) ^ Y.GetHashCode();
                 hashCode = (hashCode * 397) ^ Z.GetHashCode();
+                // ReSharper disable once NonReadonlyMemberInGetHashCode
                 hashCode = (hashCode * 397) ^ W.GetHashCode();
                 return hashCode;
             }

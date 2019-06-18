@@ -6,10 +6,20 @@ namespace rayTracer
     {
         public Guid Id { get; } = new Guid();
 
-        public float Radias { get; set; } = 1;
-
-        public Tuple CentrePoint { get; set; } = Tuple.Point(0, 0, 0);
+        private Tuple CentrePoint { get; } = Tuple.Point(0, 0, 0);
         public Matrix Transform { get; set; } = Matrix.Identity;
+        public Material Material { get; set; } = new Material();
+
+        public Tuple NormalAt(Tuple worldPoint)
+        {
+            var inverseTransform = Transform.Inverse();
+
+            var objectPoint = inverseTransform * worldPoint;
+            var objectNormal = objectPoint - CentrePoint;
+            var worldNormal = inverseTransform.Transpose() * objectNormal;
+            worldNormal.W = 0;
+            return worldNormal.Normalise();
+        }
     }
 
 

@@ -10,7 +10,7 @@ namespace rayTracer
             return Convert.ToSingle(Math.Sqrt(squares));
         }
 
-        public static float Dot(Tuple tuple, Tuple tuple2)
+        public static float Dot(this Tuple tuple, Tuple tuple2)
         {
             return tuple.X * tuple2.X +
                    tuple.Y * tuple2.Y +
@@ -18,9 +18,11 @@ namespace rayTracer
                    tuple.W * tuple2.W;
         }
 
-        public static Tuple Cross(Tuple t1, Tuple t2)
+        public static Tuple Cross(this Tuple t1, Tuple t2)
         {
             return Tuple.Vector(t1.Y * t2.Z - t1.Z * t2.Y, t1.Z * t2.X - t1.X * t2.Z, t1.X * t2.Y - t1.Y * t2.X);
         }
+
+        public static Tuple Reflect(this Tuple inV, Tuple normal) => inV - normal * 2 * inV.Dot(normal);
     }
 }

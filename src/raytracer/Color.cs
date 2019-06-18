@@ -8,6 +8,11 @@ namespace rayTracer
         {
         }
 
+        public Color(Tuple specular) : base(specular.X, specular.Y, specular.Z, 0)
+        {
+            
+        }
+
         public float Red => X;
         public float Green => Y;
 
