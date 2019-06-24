@@ -4,15 +4,16 @@ using System.Linq;
 
 namespace rayTracer
 {
+    
     public static class IntersectionHelpers
     {
         public static List<Intersection> Intersections(this Sphere sphere, Ray r)
         {
             var ray2 = r.Transform(sphere.Transform.Inverse());
             var sphereToRay = ray2.Origin - Tuple.Point(0, 0, 0);
-            var a = VectorOperations.Dot(ray2.Direction, ray2.Direction);
-            var b = 2 * VectorOperations.Dot(ray2.Direction, sphereToRay);
-            var c = VectorOperations.Dot(sphereToRay, sphereToRay) - 1;
+            var a = ray2.Direction.Dot(ray2.Direction);
+            var b = 2 * ray2.Direction.Dot(sphereToRay);
+            var c = sphereToRay.Dot(sphereToRay) - 1;
             var discriminant = Math.Pow(b, 2) - 4 * a * c;
 
             if (discriminant < 0)
